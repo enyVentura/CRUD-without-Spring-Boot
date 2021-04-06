@@ -3,29 +3,31 @@ package com.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = "people")
 public class User {
-    private String userName;
-    private String firstName;
-    private String lastName;
-    private Long id;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long getId() {
+    private Integer id;
+    @Column(name = "username")
+    private String username;
+    @Column(name = "first_name")
+    private String firstName;
+    @Column(name = "last_name")
+    private String lastName;
+
+
+    public Integer getId() {
         return id;
     }
 
-    @Column(name = "userName")
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    @Column(name = "firstName")
     public String getFirstName() {
         return firstName;
     }
@@ -34,7 +36,6 @@ public class User {
         this.firstName = firstName;
     }
 
-    @Column(name = "lastName")
     public String getLastName() {
         return lastName;
     }
@@ -43,7 +44,12 @@ public class User {
         this.lastName = lastName;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " (id:" + id + " username:" + username + "firstname" + firstName + " lastname:" + lastName + ")";
     }
 }

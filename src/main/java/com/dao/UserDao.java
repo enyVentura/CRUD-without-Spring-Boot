@@ -1,9 +1,10 @@
-package com.service;
+package com.dao;
 
-import java.util.List;
 import com.model.User;
 
-public interface UserService {
+import java.util.List;
+
+public interface UserDao {
     List<User> allUsers();
 
     void add(User user);

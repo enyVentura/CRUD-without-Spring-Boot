@@ -3,66 +3,56 @@ package com.controller;
 import com.model.User;
 import com.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 @Controller
 public class HomeController {
 
-  /*  private UserService userService;
-    private MessageSource messageSource;
-
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }*/
-
-   /* public HomeController() {
-    }
+    private final UserService userService;
 
     @Autowired
     public HomeController(UserService userService) {
         this.userService = userService;
-    }*/
-
-
-   // @RequestMapping(method = RequestMethod.GET)
-  /* @GetMapping("/list")
-    public String list(Model model){
-        List<User> users=userService.findAll();
-        model.addAttribute("users",users);
-        return "list";
-    }*/
-
-    //@RequestMapping(value = { "/", "/home" }, method = RequestMethod.GET)
-    @GetMapping("/")
-    public ModelAndView hello(HttpServletResponse response) throws IOException {
-        ModelAndView mv = new ModelAndView();
-        mv.setViewName("index");
-        return mv;
     }
 
+    @GetMapping("/users")
+    public String findAll(Model model) {
+        List<User> userList = userService.allUsers();
+        model.addAttribute("users", userList);
+        return "user-list";
+    }
 
+    @GetMapping("/user-create")
+    public String createUserForm(User user) {
+        return "user-create";
+    }
 
+    @PostMapping("/user-create")
+    public String createUser(User user) {
+        userService.add(user);
+        return "redirect:/users";
+    }
 
+    @GetMapping("/user-delete/{id}")
+    public String deleteUser(@PathVariable("id") Integer id) {
+        userService.delete(id);
+        return "redirect:/users";
+    }
 
+    @GetMapping("/user-update/{id}")
+    public String updateUserForm(@PathVariable("id") Integer id, Model model) {
+        User user = userService.getById(id);
+        model.addAttribute("user", user);
+        return "user-update";
+    }
 
-    /*@GetMapping("/")
-    public String getIndex(){
-        return "index";
-    }*/
-
-    @GetMapping("/welcome")
-    public String getWelcome(){
-        return "welcome";
+    @PostMapping("/user-update")
+    public String updateUser(@ModelAttribute("user") User user) {
+        userService.edit(user);
+        return "redirect:/users";
     }
 }
